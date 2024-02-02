@@ -3,6 +3,7 @@ using Abp.Zero.EntityFrameworkCore;
 using MyCollegeTask.Authorization.Roles;
 using MyCollegeTask.Authorization.Users;
 using MyCollegeTask.MultiTenancy;
+using MyCollegeTask.Modules;
 
 namespace MyCollegeTask.EntityFrameworkCore
 {
@@ -23,5 +24,6 @@ namespace MyCollegeTask.EntityFrameworkCore
                 .Property(p => p.Value)
                 .HasMaxLength(100); // any integer that is smaller than 10485760
         }
+        public virtual DbSet<Student> Students { get; set; }
     }
 }
