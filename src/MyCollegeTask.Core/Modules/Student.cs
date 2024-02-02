@@ -8,6 +8,9 @@ namespace MyCollegeTask.Modules
 {
     public class Student : FullAuditedEntity<int>, IPassivable
     {
+
+        // Foreign key for College
+        public int? CollegeId { get; set; }
         public Student()
         {
             this.IsActive = true;
@@ -24,6 +27,9 @@ namespace MyCollegeTask.Modules
         public string DoB { get; set; }
 
         public bool IsActive { get; set; }
+
+        // Navigation property
+        public College College { get; set; }
 
     }
 }

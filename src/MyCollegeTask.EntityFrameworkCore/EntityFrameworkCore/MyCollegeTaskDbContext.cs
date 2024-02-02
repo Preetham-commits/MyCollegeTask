@@ -23,7 +23,13 @@ namespace MyCollegeTask.EntityFrameworkCore
             modelBuilder.Entity<Abp.Localization.ApplicationLanguageText>()
                 .Property(p => p.Value)
                 .HasMaxLength(100); // any integer that is smaller than 10485760
+
+            modelBuilder.Entity<Student>()
+        .HasOne(s => s.College) // Student has one College
+        .WithMany(c => c.Students) // College has many Students
+        .HasForeignKey(s => s.CollegeId); // The foreign key in Student is CollegeId
         }
         public virtual DbSet<Student> Students { get; set; }
+        public virtual DbSet<College> College { get; set; }
     }
 }
