@@ -6,8 +6,6 @@ using Abp.Domain.Entities.Auditing;
 
 namespace MyCollegeTask.Modules
 {
-
-
     public class College : FullAuditedEntity<int>, IPassivable
     {
         public College()
