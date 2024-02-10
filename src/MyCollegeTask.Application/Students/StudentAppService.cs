@@ -53,8 +53,6 @@ namespace MyCollegeTask.Students
                 {
                     throw new ArgumentException("A college for the student is mandatory.");
                 }
-
-                // Rest of the code to create the student
                 var student = new Student
                 {
                     CollegeId = input.CollegeId,
@@ -64,17 +62,14 @@ namespace MyCollegeTask.Students
                     IsActive = input.IsActive,
                     ProgramName = input.ProgramName,
                     DoB = input.DoB,
-                    // Assuming CreationTime and IsActive are handled in the College constructor
-                };
 
-                // Add any additional logic or validation here if needed
+                };
 
                 student = await _studentRepository.InsertAsync(student);
                 return student.Id;
             }
             catch (ArgumentException ex)
             {
-                // Catch the specific exception and return a custom response
                 throw new UserFriendlyException(ex.Message);
             }
         }
