@@ -1,50 +1,40 @@
 ﻿using Abp.Application.Services;
-using Abp.Domain.Entities;
 using Abp.Domain.Repositories;
-using MyCollegeTask.Modules;
 using MyCollegeTask.Students.Dto;
-using Abp.ObjectMapping;
 using Abp.Application.Services.Dto;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MyCollegeTask.Colleges.Dto;
+using Abp.ObjectMapping;
 using System;
 using Abp.UI;
+using MyCollegeTask.Modules;
 
 namespace MyCollegeTask.Students
 {
-    public class StudentAppService : AsyncCrudAppService<Student, StudentDto, int, PagedStudentResultRequestDto, CreateStudentDto, StudentDto>
+    public class StudentAppService : ApplicationService, IStudentAppService // Assuming IStudentAppService is your custom interface
     {
         private readonly IRepository<Student, int> _studentRepository;
         private readonly IObjectMapper _objectMapper;
 
-        public StudentAppService(IRepository<Student, int> repository, IRepository<Student, int> studentRepository, IObjectMapper objectMapper)
-            : base(repository)
+        public StudentAppService(IRepository<Student, int> studentRepository, IObjectMapper objectMapper)
         {
             _studentRepository = studentRepository;
             _objectMapper = objectMapper;
         }
 
-        public async Task<ListResultDto<StudentDto>> GetAllStudents()
+        public async Task<ListResultDto<StudentDto>> GetAll()
         {
             var students = await _studentRepository.GetAllListAsync();
             return new ListResultDto<StudentDto>(_objectMapper.Map<List<StudentDto>>(students));
         }
 
-        public async Task<StudentDto> GetStudentById(int studentId)
+        public async Task<StudentDto> GetById(int id)
         {
-            var student = await _studentRepository.GetAsync(studentId);
+            var student = await _studentRepository.GetAsync(id);
             return _objectMapper.Map<StudentDto>(student);
         }
 
-        //public async Task<int> CreateStudent(CreateStudentDto input)
-        //{
-        //    var student = MapToEntity(input);
-        //    student = await _studentRepository.InsertAsync(student);
-        //    return student.Id;
-        //}
-
-        public async Task<int> CreateStudent(CreateStudentDto input)
+        public async Task<int> Create(CreateStudentDto input)
         {
             try
             {
@@ -74,16 +64,18 @@ namespace MyCollegeTask.Students
             }
         }
 
-        public async Task UpdateStudent(StudentDto input)
+        public async Task Update(StudentDto input)
         {
             var student = await _studentRepository.GetAsync(input.Id);
-            MapToEntity(input, student);
+            _objectMapper.Map(input, student); 
             await _studentRepository.UpdateAsync(student);
+            await CurrentUnitOfWork.SaveChangesAsync(); 
         }
 
-        public async Task DeleteStudent(int studentId)
+        public async Task Delete(int id)
         {
-            await _studentRepository.DeleteAsync(studentId);
+            await _studentRepository.DeleteAsync(id);
+            await CurrentUnitOfWork.SaveChangesAsync(); 
         }
     }
 }

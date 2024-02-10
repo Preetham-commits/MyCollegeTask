@@ -55,15 +55,15 @@ namespace MyCollegeTask.Colleges
         public async Task Update(CollegeDto input)
         {
             var college = await _collegeRepository.GetAsync(input.Id);
-            _objectMapper.Map(input, college); // Assuming AutoMapper is correctly configured
+            _objectMapper.Map(input, college); 
             await _collegeRepository.UpdateAsync(college);
-            await CurrentUnitOfWork.SaveChangesAsync(); // Ensure changes are committed
+            await CurrentUnitOfWork.SaveChangesAsync(); 
         }
 
         public async Task Delete(int collegeId)
         {
             await _collegeRepository.DeleteAsync(collegeId);
-            await CurrentUnitOfWork.SaveChangesAsync(); // Ensure changes are committed
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
     }
 }
